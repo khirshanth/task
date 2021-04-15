@@ -3,54 +3,42 @@ import axios from "axios";
 
 
 
-function Task() {
-    const [todos,setTodos]=useState()
-    const headings = todos && Object.keys((todos[0]))
-    const [select,setSelect]=useState("")
-    
-    useEffect(()=>{
-      axios({
-          method:"get",
-          url:"https://jsonplaceholder.typicode.com/todos"
-      }).then((res) =>{
-          setTodos(res.data)
-          console.log(res.data.completed,"completed value")
-      })
-    },[])
-    console.log(select)
-    return (
-        <div>
-            <input name="select" value={select} onChange={(e)=> {setSelect(e.target.value)}}/>
-            <table cellPadding={0} cellSpacing={0}>
-               <thead>
-                  <tr>{todos && headings.map((heading) => <th>{heading}</th>)}</tr>
-               </thead>
-               
-               <tbody>
-                   {todos && todos.filter((val)=>{
-                               if(select === ""){
-                                   return val
-                               }else if(val.title.toLowerCase().indexOf(select.toLowerCase()) > -1){
-                                   return val
-                               }
-                           }).map(row => <tr>
-                       {
-                        headings && headings.map(ele => 
-                            
-                               <td>
-                                   {row[ele]}
-                               </td>
-                           )
-                       }
-                   </tr>)}
-               </tbody>
-               
-             
-              
-              
-            </table>
-        </div>
-    )
+const Task  = (query,pagenumber)  => {
+    const [loading,setLoading] = useState(false)
+    const  [books,setBooks] =  useState([])
+    const  [error,setError]=useState(true)
+    const [hasmore,setHasmore] =useState()
+
+useEffect(() =>{
+    setLoading(true)
+    setError(false)
+    axios({
+        method:"GET",
+        url:"http://openlibrary.org/search.json",
+        params:{q:query,page:pagenumber}
+  })
+  .then((res) =>
+        {
+            console.log(res.data.docs)
+            // setBooks(prevBooks => {
+            //     return  ([...prevBooks,res.data.docs.map(b => b.title)])
+            // }
+                // )
+                setBooks(res.data.docs)
+             setHasmore(res.data.docs.length > 0)
+             setLoading(false)   
+        }
+  
+
+  
+  ) 
+  console.log(books)
+},[query,pagenumber])
+
+    return {  loading ,error , hasmore   }
+
+    // return null
 }
+    
 
 export default Task

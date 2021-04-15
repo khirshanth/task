@@ -1,28 +1,24 @@
 import React,{useState,useEffect} from "react"
 import './App.css';
-import {BrowserRouter,Route,Switch} from "react-router-dom"
-// import auth from "../../../server/client/auth"
-// import home from "../../../server/client/home"
-import Task from "./components/task"
+import {BrowserRouter as Router,Route,Switch} from "react-router-dom"
 
-export const credentialValue = React.createContext()
+import store from "./Redux/Features/Store"
+
+import Home from "./Pages/Home"
+import SignIn from "./Pages/SignIn"
+import SignUp from "./Pages/SignUp"
 const   App = () => {
-    const credentials = useState("hello")
-    console.log(credentials,"name")
+
   return (
     <div className="App">
-      {/* <credentialValue.Provider value={credentials}>
-       <BrowserRouter>
-          <Switch>
-              <Route  exact path="/" component={home}/>
-              <Route path="/register" component={auth}/>
-         </Switch>
-       
-
-       </BrowserRouter>
-       </credentialValue.Provider> */}
-
-       <Task/>
+        
+          <Router>
+              <Switch>
+                   <Route path="/"  exact component={Home}/>
+                   <Route path="/signin" component={SignIn}/>
+                   <Route path="/signup" component={SignUp}/>
+              </Switch>
+          </Router>
     </div>
   );
 }
